@@ -1,0 +1,2 @@
+c:/Users/User/Documents/PC_Data/Study/Frameworks/venv/Scripts/Activate.ps1
+
