@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+</head>
+
+<body>
+
+    <div class="row">
+        <h1 class="col-12 text-monospace text-center">Список новостей последней недели</h1>
+        {% for news in news_table %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <h2>{{ news.title }}</h2>
+            <p>{{ news.description }}</p>
+            <p>{{ news.date }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

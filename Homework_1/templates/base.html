@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        Мой магазин
+        {% endblock %}
+    </title>
+</head>
+
+<body>
+    <header>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/shoes/">Обувь</a></li>
+            <li><a href="/clothes/">Одежда</a></li>
+            <ul>
+                <li><a href="jacket">Куртки</a></li>
+            </ul>
+        </ul>
+    </header>
+    <main>
+        {% block content %}
+        <div class="row">
+            <h1 class="col-12 col-md-6 display-2">Онлайн-магазин брендовой одежды и обуви</h1>
+            <img src="/static/image/clothes_photo.jpg" class="col-12 col-md-6 img-fluid rounded-circle" alt="Заставка">
+        </div>
+        {% endblock %}
+    </main>
+    <footer>
+        <p class="alert-dark">Все права защищены &copy;, 2023-2024</p>
+    </footer>
+</body>
+
+</html>

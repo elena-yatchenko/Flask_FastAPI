@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Коллекция женской одежды{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h1>Бренды одежды:</h1>
+    {% for elem in data %}
+    <p>{{ elem }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
+<!-- {{ super() }} - {{ content }} -->
