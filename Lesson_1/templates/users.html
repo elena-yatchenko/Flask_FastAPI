@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students</title>
+</head>
+
+<body>
+
+    <table>
+        <tr>
+            <!-- строка таблицы -->
+            {% for key in students[0].keys() %}
+            <th>
+                {{ key }}
+            </th>
+            <!-- ячейка шапки таблицы -->
+            {% endfor %}
+        </tr>
+        {% for student in students %}
+        <tr>
+            <!-- обычная ячейка таблицы -->
+            <td>
+                {{ student['Имя']}}
+            </td>
+            <td>
+                {{ student['Фамилия']}}
+            </td>
+            <td>
+                {{ student['Возраст']}}
+            </td>
+            <td>
+                {{ student['Средний бал']}}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

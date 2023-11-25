@@ -90,14 +90,15 @@ __name__.
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def hello_world():
-    return 'Hello world!'
-    # return 42 - ВЫДАСТ ОШИБКУ (фласк не может вернуть целое число, как 
+    return "Hello world!"
+    # return 42 - ВЫДАСТ ОШИБКУ (фласк не может вернуть целое число, как
     # какую-то html страницу, нужно возвращать строку либо оборачивать число
     # внутри f-строки)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run()
 
 """
@@ -147,3 +148,6 @@ deployment. Use a production WSGI server instead.
 # C:\Users\User\Documents\PC_Data\Study\Flask_FastAPI\Flask_FastAPI\Lecture_1\Lect_1_First_veb.py
 
 # flask --app  C:\Users\User\Documents\PC_Data\Study\Frameworks\Flask_FastAPI\Lecture_1\Lect_1_Flask_base.py run
+
+# flask --app  'D:\My Documents\docs\Geek Brains\Flask_FastAPI\Lecture_1\Lect_1_Flask_base.py' run
+#

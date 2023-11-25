@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students</title>
+</head>
+<!-- первый вариант
+<body>
+    {{ people | safe }}
+</body> -->
+
+<!-- второй вариант -->
+
+<body>
+    {% autoescape false %}
+    {{ people }}
+    {% endautoescape %}
+</body>
+
+</html>
