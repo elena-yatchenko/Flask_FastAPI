@@ -52,25 +52,6 @@ def poems():
 # РЕНДЕРИНГ HTML файла
 
 """Попробуем вывести файл index.html, используя локальный сервер Flask."""
-"""
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <title>Главная</title>
-</head>
-<body>
-    <h1 class="text-monospace">Привет, меня зовут Алексей</h1>
-    <img src="/static/image/foto.jpg" alt="Моё фото" width="300">
-    <p class="text-body text-justify">Lorem ipsum dolor sit amet,
-consectetur adipisicing elit. Ad cupiditate doloribus ducimus nam
-provident quo similique! Accusantium aperiam fugit magnam quas
-reprehenderit sapiente temporibus voluptatum!</p>
-    <p class="alert-dark">Все права защищены &copy;</p>
-</body>
-</html>
-"""
 
 """Начнём с того, что импортируем функцию отрисовки шаблонов. render_template()
 принимает в качестве первого аргумента название html-файла, который
@@ -106,8 +87,9 @@ jinja2.exceptions.TemplateNotFound: index.html
 
 """🔥 Внимание! Если изображения или стили отсутствуют, необходимо
 переместить их в соответствующие каталоги: стили в static/css, а
-изображения — в static/image. В самом html проверить путь к файлам(для index.html из примера):
+изображения — в static/image. В самом html проверить путь к файлам
 
+(для index.html из примера):
 <link rel="stylesheet" href="/static/css/style.css">
 <img src="/static/image/foto.png" alt="Моё фото" width="300">
 

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Главная</title>
+</head>
+
+<body>
+    <h1 class="text-monospace text-center">Стихотворение</h1>
+    <p class="row">
+
+        {% for line in poem %}
+        <span class="text-black-50 col-12 col-md-6">{{ line }}</span><br />
+        {% endfor %}
+
+    </p>
+</body>
+
+</html>

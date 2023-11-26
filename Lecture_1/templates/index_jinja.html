@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <h1 class="text-monospace">Привет, меня зовут {{ name }}</h1>
+    <img src="/static/kitty.png" alt="Моё фото" width="300">
+    <p class="text-body text-justify">Это моя страничка для проверки
+        работы минифреймворка Flask!</p>
+    <p>К прочтению предлагается {{ number }}
+        {% if number == 1 %}
+        пост
+        {% elif 2 <= number <=4 %} поста {% else %} постов {% endif %} </p>
+            <p class="alert-dark">Все права защищены &copy;</p>
+</body>
+
+</html>
