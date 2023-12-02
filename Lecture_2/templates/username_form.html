@@ -1,0 +1,13 @@
+{% extends 'base_L2.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+<form method="post">
+    <input type="text" name="username" placeholder="Имя">
+    <input type="submit" value="Отправить">
+</form>
+{% endblock %}
+
+
+<!-- Простая форма запрашивает username и отправляет его на сервер.  -->
