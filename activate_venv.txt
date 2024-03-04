@@ -1,2 +1,2 @@
-c:/Users/User/Documents/PC_Data/Study/Frameworks/venv/Scripts/Activate.ps1
+PS C:\Users\User\Documents\PC_Data\Study\Flask_FastAPI> venv/Scripts/Activate.ps1
 
