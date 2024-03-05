@@ -6,6 +6,7 @@
 from flask import Flask
 from flask import render_template
 import pandas as pd
+import pretty_html_table
 
 app = Flask(__name__)
 
@@ -17,14 +18,16 @@ def base():
 
 @app.route("/clothes/")
 def clothes():
-    cl_brends = ["Calvin Klein", "ZARA", "Massimo Dutti", "Guess", "Marks&Spencer"]
+    cl_brends = ["Calvin Klein", "ZARA",
+                 "Massimo Dutti", "Guess", "Marks&Spencer"]
     context = {"data": cl_brends}
     return render_template("clothes.html", **context)
 
 
 @app.route("/shoes/")
 def shoes():
-    sh_brends = ["Valentino Garavani", "Jimmy Choo", "Calvin Klein", "Emporio Armani"]
+    sh_brends = ["Valentino Garavani", "Jimmy Choo",
+                 "Calvin Klein", "Emporio Armani"]
     context = {"title": "Коллекция женской обуви", "data": sh_brends}
     return render_template("shoes.html", **context)
 
@@ -37,11 +40,18 @@ def jacket():
         {"EUR": "38", "USA": "M", "RUS": 46},
         {"EUR": "40", "USA": "L", "RUS": 48},
     ]
-    html_table = pd.DataFrame(size).to_html()
-
+    pd.set_option('display.max_colwidth', None)
+    # html_table = pd.DataFrame(size).to_html()
+    html_table = pd.DataFrame(size)
+    html_table = pretty_html_table.build_table(
+        html_table, 'blue_light', font_size='large')
     context = {"title": "Куртки", "size_table": html_table}
     return render_template("jacket.html", **context)
 
 
 if __name__ == "__main__":
     app.run()
+
+
+"""формат таблицы pandas
+"""
