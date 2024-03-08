@@ -20,12 +20,14 @@ from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-@app.route('/submit', methods=['GET', 'POST'])
+
+@app.route("/submit/", methods=["GET", "POST"])
 def submit():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        return f'Hello {name}!'
-    return render_template('post_request.html')
+    if request.method == "POST":
+        name = request.form.get("name")
+        return f"Hello {name}!"
+    return render_template("post_request.html")
+
 
 """В декораторе передаём список ['GET', 'POST'] по ключу methods. Теперь view готова
 обрабатывать как get, так и post запросы. Внутри делаем проверку метода. Если
@@ -63,3 +65,10 @@ HTML форме. Альтернатива - блок try с обработкой
 
 if __name__ == "__main__":
     app.run()
+
+"""!!!
+Доступ к данным формы, передаваемой POST запросом.
+Для доступа к данным формы (передаваемым в запросах POST или PUT) нужно использовать атрибут входящего 
+запроса request.form, который так же представляет собой словароподобный объект. 
+Ключи request.form имеют значения атрибута name HTML-тэга <input> в форме (например <input name="username">).
+"""

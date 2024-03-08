@@ -147,7 +147,7 @@ Either the server is overloaded or there is an error in the application.
 import logging
 from flask import Flask, render_template, request, abort
 
-# from db import get_blog
+from db import get_blog
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
