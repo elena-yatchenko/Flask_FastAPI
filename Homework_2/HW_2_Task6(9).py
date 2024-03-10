@@ -16,14 +16,6 @@ def index():
     return redirect(url_for("submit"))
 
 
-# @app.route("/<name>/")
-# def hello(name):
-#     context = {"title": "Приветствие", "name": name}
-#     response = make_response(render_template("hello_page.html", **context))
-#     response.set_cookie("username", context["name"])
-#     return f"Hello, {name}"
-
-
 @app.route("/submit", methods=["GET", "POST"])
 def submit():
     if request.method == "POST":
@@ -31,18 +23,20 @@ def submit():
         email = request.form.get("email")
         context = {"title": "Приветствие", "name": name, "email": email}
         response = make_response(render_template("hello_page.html", **context))
-        response.set_cookie("username", [context["name"], context["email"]])
+        response.set_cookie("username", context["name"])
+        response.set_cookie("usermail", context["email"])
         return response
     return render_template("get_name.html")
 
 
-# @app.route("/")
-# def index():
-#     context = {"title": "Главная", "name": "Елена"}
-#     response = make_response(render_template("main.html", **context))
-#     response.headers["new_head"] = "New value"
-#     response.set_cookie("username", context["name"])
-#     return response
+@app.route("/hello/", methods=["GET", "POST"])
+def delete_cookie():
+    if request.method == "POST":
+        response = make_response(render_template("get_name.html"))
+        response.set_cookie("username", request.cookies.get("username"), 0)
+        response.set_cookie("usermail", request.cookies.get("usermail"), 0)
+        return response
+    return render_template("hello_page.html")
 
 
 if __name__ == "__main__":

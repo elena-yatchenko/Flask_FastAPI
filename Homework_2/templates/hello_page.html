@@ -12,14 +12,15 @@
 
 <div class="row">
     <p class="col-12">Добро пожаловать, {{ name }}<br>
-        <img src="/static/image/kitty.png" class="col-12 col-md-6 img-fluid rounded-circle" alt="Моё фото">
-    </p>
-    <input type="button" name="logout" value="Выйти">
+        <img src="/static/image/kitty.png" class="col-12 col-md-6 img-fluid rounded-circle" alt="Моё фото"><br>
+    <form action="/hello" method="post">
+        <!-- <a href="{{ url_for('submit') }}">
+            <input type="button" name="logout" value="Выйти">
+        </a> -->
+        <input type="submit" value="Выйти">
+        </p>
+
+    </form>
 </div>
 
 {% endblock %}
-
-
-<!-- Обратите внимание, что адрес главной страницы указан не явно, а генерируется
-через url_for. Подобная практика должна использоваться во всех шаблонах проекта
-для удобства масштабирования. -->
