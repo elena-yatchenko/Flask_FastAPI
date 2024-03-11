@@ -106,3 +106,57 @@ if __name__ == "__main__":
 """Flash сообщения являются удобным способом передачи информации между
 запросами в Flask. Они позволяют выводить сообщения пользователю и упрощают
 обработку ошибок и успешных операций"""
+
+"""!!!
+Когда вы вызываете функцию flash(), Flask сохраняет сообщение, но на веб-страницах не будут появляться магические сообщения. Шаблоны приложения должны отображать эти свернутые сообщения таким образом, который работает для макета сайта. Я собираюсь добавить эти сообщения в базовый шаблон, чтобы все шаблоны наследовали эту функциональность. Это обновленный базовый шаблон:
+
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - microblog</title>
+        {% else %}
+        <title>microblog</title>
+        {% endif %}
+    </head>
+    <body>
+        <div>
+            Microblog:
+            <a href="/index">Home</a>
+            <a href="/login">Login</a>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
+
+Здесь я использую конструкцию with, чтобы назначить результат вызова get_flashed_messages() переменной messages, 
+все в контексте шаблона. Функция get_flashed_messages() поступает из Flask и возвращает список всех сообщений, 
+которые были зарегистрированы в flash() ранее. Условие, которое следует, проверяет, 
+имеет ли сообщение некоторый контент, и в этом случае элемент <ul>отображается с каждым сообщением 
+в виде элемента списка <li>. 
+Этот стиль рендеринга выглядит не очень хорошо, но тема стилизации веб-приложения появится позже.
+
+Интересным свойством этих flash-сообщений является то, что после их запроса один раз через функцию 
+get_flashed_messages они удаляются из списка сообщений, поэтому они появляются только 
+один раз после вызова функции flash().
+
+from flask import render_template, flash, redirect
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect('/index')
+    return render_template('login.html', title='Sign In', form=form)
+"""

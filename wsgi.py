@@ -4,7 +4,8 @@
 следущим кодом.
 """
 
-from Lecture_1.Lect_1_Flask_base import app
+# from Lecture_1.Lect_1_Flask_base import app
+from Lecture_3.main import app
 
 if __name__ == "__main__":
     app.run(debug=True)
