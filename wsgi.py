@@ -1,11 +1,11 @@
-# ОПТИМИЗАЦИЯ 
+# ОПТИМИЗАЦИЯ
 
 """Внесём изменения в проект. В КОРНЕВОМ каталоге создадим файл wsgi.py со
 следущим кодом.
 """
 
 # from Lecture_1.Lect_1_Flask_base import app
-from Lecture_3.main import app
+from Homework_3.HW_app_3 import app
 
 if __name__ == "__main__":
     app.run(debug=True)
@@ -26,5 +26,3 @@ flask run --debug
 использоваться своя конструкция app.run() для запуска именно этого
 файла в качестве Flask сервера.
 """
-
-

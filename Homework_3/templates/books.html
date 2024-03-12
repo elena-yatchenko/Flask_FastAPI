@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+
+{{ super() }} - {{ title }}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+    {% for book in books %}
+    <p>
+        Книга: {{ book.name }} - Автор: {{ book.author_reference.author_name }}
+        {{book.author_reference.author_lastname}}<br>
+        Год издания: {{ book.public_year }}<br>
+        Тираж: {{ book.count }}<br>
+
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}
