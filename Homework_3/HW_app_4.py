@@ -47,8 +47,10 @@ def register():
             # print(login, email, password)
             """Вопрос преподавателю: подскажите, может есть более оптимальный вариант эти проверки делать, чем тот, 
             что я придумала?"""
-            users = [user.username for user in User.query.filter_by(username = login).all()]
-            emails = [user.email for user in User.query.filter_by(email = email).all()]
+            # гененируем множество логинов(имен) пользователей из БД
+            users = {user.username for user in User.query.filter_by(username = login).all()}
+            # генерируем множество email пользователей из БД
+            emails = {user.email for user in User.query.filter_by(email = email).all()}
             new_user = User(
             username=login,
             email=email,
