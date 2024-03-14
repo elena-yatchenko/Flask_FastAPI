@@ -14,3 +14,5 @@ class RegistrationForm(FlaskForm):
     agreement = BooleanField(
         "I agree with processing of my personal data", validators=[DataRequired()]
     )
+
+  
