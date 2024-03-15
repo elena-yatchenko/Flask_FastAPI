@@ -3,7 +3,7 @@ import os
 import aiofiles
 import time
 
-MY_PATH = "."
+MY_PATH = 'Lecture_3_SQLA, WTF'
 
 
 async def worker(file_):
@@ -13,9 +13,12 @@ async def worker(file_):
 
 
 async def main():
-    for root, dirs, file_name in os.walk(MY_PATH):
-        for f in file_name:
-            task = asyncio.create_task(worker(f))
+    for root, dirs, files in os.walk(MY_PATH):
+        if not dirs:
+            continue
+        for file in files:
+            file_path = os.path.join(root, file)
+            task = asyncio.create_task(worker(file_path))
             await task
 
 

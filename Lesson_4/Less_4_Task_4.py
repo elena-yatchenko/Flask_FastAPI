@@ -1,52 +1,35 @@
-# Создать программу, которая будет производить подсчет количества слов в каждом файле в указанной директории и выводить результаты в консоль.
-# Используйте потоки.
-
+# Задание №4
+# � Создать программу, которая будет производить подсчет
+# количества слов в каждом файле в указанной директории и
+# выводить результаты в консоль.
+# � Используйте потоки.
 
 import threading
 import os
 
-MY_PATH = "."
-
+# MY_PATH = os.path.join(os.getcwd(), 'Lecture_3_SQLA, WTF')
+MY_PATH = 'Lecture_3_SQLA, WTF'
 
 def worker(file_):
     with open(file_, "r", encoding="utf-8") as f:
         content = f.read()
-        print(f"Слов в {file_} : {len(content.split())}")
-
-
-threads = []
-
-for root, dirs, file_name in os.walk(MY_PATH):
-    for f in file_name:
-        t = threading.Thread(target=worker, args=(f,))
-        threads.append(t)
-        t.start()
-
-for t in threads:
-    t.join()
-
-"""или так"""
-
-import threading
-import os
-
-MY_PATH = "."
-
-
-def count_words_in_file(file_):
-    with open(file_, "r", encoding="utf-8") as f:
-        content = f.read()
         num_words = len(content.split())
-        print(f"Слов в файле {file_}: {num_words}")
+        print(f"Слов в {file_}: {num_words}")
 
 
-def process_files_in_directory(directory):
+def main(directory):
     threads = []
 
-    for root, dirs, file_names in os.walk(directory):
-        for file_name in file_names:
-            file_path = os.path.join(root, file_name)
-            t = threading.Thread(target=count_words_in_file, args=(file_path,))
+    for root, dirs, files in os.walk(directory):
+        # пропускаем тот случай, когда функция итерируется по файлам папки _pycache_, вызывая ошибку при чтении их форматов
+        # т.к. в этом случае список dirs будет пустым, поэтому добавляем это условие. Но это решение только для данной
+        # конкретной папки, чтобы не заморачиваться с pycache так делать не нужно, иначе будем пропускать ряд нужных файлов
+        if not dirs:
+            continue
+        for file in files:
+            # print(dirs)
+            file_path = os.path.join(root, file)
+            t = threading.Thread(target=worker, args=(file_path,))
             threads.append(t)
             t.start()
 
@@ -55,4 +38,4 @@ def process_files_in_directory(directory):
 
 
 if __name__ == "__main__":
-    process_files_in_directory(MY_PATH)
+    main(MY_PATH)

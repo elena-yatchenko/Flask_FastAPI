@@ -2,7 +2,7 @@ import multiprocessing
 import os
 
 MY_PATH = "."
-
+MY_PATH = 'Lecture_3_SQLA, WTF'
 
 def worker(file_):
     with open(file_, "r", encoding="utf-8") as f:
@@ -10,12 +10,21 @@ def worker(file_):
         print(f"Слов в {file_} : {len(content.split())}")
 
 
-if __name__ == "__main__":
+def main(directory):
     multiprocess = []
-    for root, dirs, file_name in os.walk(MY_PATH):
-        for f in file_name:
-            t = multiprocessing.Process(target=worker, args=(f,))
-            multiprocess.append(t)
-            t.start()
-    for t in multiprocess:
-        t.join()
+    for root, dirs, files in os.walk(directory):
+        if not dirs:
+            continue
+        for file in files:
+            file_path = os.path.join(root, file)
+            process = multiprocessing.Process(target=worker, args=(file_path,))
+            multiprocess.append(process)
+            process.start()
+
+        for process in multiprocess:
+            process.join()
+         
+
+
+if __name__ == "__main__":
+    main(MY_PATH)

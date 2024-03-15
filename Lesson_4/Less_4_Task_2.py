@@ -1,11 +1,12 @@
-# Задание №1
+# Задание №2
 # � Написать программу, которая считывает список из 10 URLадресов и одновременно загружает данные с каждого
 # адреса.
-# � После загрузки данных нужно записать их в отдельные файлы.
-# � Используйте потоки.
+# � После загрузки данных нужно записать их в отдельные
+# файлы.
+# � Используйте процессы
 
 import requests
-import threading
+from multiprocessing import Process, Pool
 import time
 import os
 
@@ -19,7 +20,7 @@ urls = ['https://www.google.ru/',
 
 def download(url):
     response = requests.get(url)
-    filename = 'thread_' + url.replace('https://',
+    filename = 'multiproc_' + url.replace('https://',
                                           '').replace('.', '_').replace('/', '') + '.html'
     file_path = os.path.join(os.getcwd(), 'Lesson_4', 'files', filename)
     with open(file_path, "w", encoding='utf-8') as f:
@@ -27,13 +28,15 @@ def download(url):
         print(f"Downloaded {url} in {time.time()-start_time:.2f} seconds")
 
 
-threads = []
+processes = []
 start_time = time.time()
 
-for url in urls:
-    thread = threading.Thread(target=download, args=[url])
-    threads.append(thread)
-    thread.start()
+if __name__ == '__main__':
 
-for thread in threads:
-    thread.join()
+    for url in urls:
+        process = Process(target=download, args=[url])
+        processes.append(process)
+        process.start()
+
+    for process in processes:
+        process.join()
