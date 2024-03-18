@@ -9,14 +9,15 @@
 # Создайте маршрут для обновления задачи (метод PUT).
 # Создайте маршрут для удаления задачи (метод DELETE).
 # Реализуйте валидацию данных запроса и ответа.
-""""todo", "in progress", "done".
-"""
+
 
 from fastapi import FastAPI
+
 # import logging
 from typing import Optional
 from pydantic import BaseModel
 from random import choice
+import uvicorn
 
 
 # logging.basicConfig(level=logging.INFO)
@@ -24,46 +25,65 @@ from random import choice
 
 app = FastAPI()
 
+
 class Task(BaseModel):
     id: int
     title: str
     description: Optional[str] = None
     status: str
 
-#print(tasks)
 
-@app.get('/')
+# print(tasks)
+
+statuses = ["to do", "in progress", "done"]
+tasks = []
+for i in range(1, 6):
+    id = i
+    title = "name_" + str(i)
+    description = "description_" + str(i) * 3
+    status = choice(statuses)
+    data = {"id": id, "title": title, "description": description, "status": status}
+    task = Task(**data)
+    tasks.append(task)
+print(tasks)
+
+
+@app.get("/")
 async def root():
-    return {'message': 'Hello world'}
+    return {"message": "Hello world"}
 
-@app.get('/data/')
+
+@app.get("/data/")
 async def receive():
-    statuses = ['to do', 'in progress', 'done']
-    tasks = []
-    for i in range(1, 6):
-        id = i
-        title = 'name_' + str(i)
-        description = 'description_' + str(i)*3
-        status = choice(statuses)
-        data = {'id': id, 'title': title, 'description': description, 'status': status}
-        task = Task(**data)
-        tasks.append(task)
-    return {'task_list': tasks}
-    
 
-# @app.post("/tasks/")
-# async def create(task: Task):
-#     return task
+    return {"task_list": tasks}
 
 
-# @app.put("/tasks/{task_id}")
-# async def updating(task_id: int, task: Task):
-#     return {"task_id": task_id, "task": task}
+@app.post("/tasks/")
+async def create(task: Task):
+    tasks.append(task)
+    return task
 
 
-# @app.delete("/tasks/{task_id}")
-# async def delete_data(task_id: int):
-#     return {"task_id": task_id}
+@app.put("/tasks/{task_id}")
+async def updating(task_id: int, task: Task):
+    for i in range(len(tasks)):
+        if tasks[i].id == task_id:
+            tasks[i] = task
+    return {"task_id": task_id, "task": task}
+
+
+@app.delete("/tasks/{task_id}")
+async def delete_data(task_id: int):
+    for task in tasks:
+        if task.id == task_id:
+            tasks.remove(task)
+    print(tasks)
+    return {"task_id": task_id}
+
+
+if __name__ == "__main__":
+    uvicorn.run("Less_5_main_1:app", host="127.0.0.1", port=8000)
 
 
 """пример создания класса на основе BaseModel
