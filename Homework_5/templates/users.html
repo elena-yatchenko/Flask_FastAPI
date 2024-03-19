@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> {{page_name}} </title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            {% for elem in data[0] %}
+            <th>
+                {{ elem[0] }}
+            </th>
+            {% endfor %}
+        </tr>
+        {% for user in data %}
+        <tr>
+            <td>
+                {{ user.id }}
+            </td>
+            <td>
+                {{ user.name }}
+            </td>
+            <td>
+                {{ user.email }}
+            </td>
+            <td>
+                {{ user.password }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p>
+    <form action="/">
+        <button type="submit">Добавить нового пользователя</button>
+    </form>
+    </p>
+    <!-- <p><button>Добавить нового пользователя</button></p> -->
+
+</body>
+
+</html>

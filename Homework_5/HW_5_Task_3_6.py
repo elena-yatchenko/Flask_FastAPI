@@ -15,7 +15,9 @@
 # Создайте маршрут для отображения списка пользователей (метод GET).
 # Реализуйте вывод списка пользователей через шаблонизатор Jinja.
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from typing import Optional
 from pydantic import BaseModel
@@ -23,9 +25,8 @@ from random import choice
 import uvicorn
 import string
 
-
 app = FastAPI()
-
+templates = Jinja2Templates(directory='Homework_5\\templates')
 
 class User(BaseModel):
     id: int
@@ -45,12 +46,15 @@ for i in range(1, 6):
     data = {"id": id, "name": name, "email": email, "password": password}
     user = User(**data)
     users.append(user)
-print(users)
-
-
+#print(users)
+    
 @app.get("/")
 async def root():
     return users
+
+@app.get("/{page_name}", response_class=HTMLResponse)
+async def read_list(request: Request, page_name: str):
+    return templates.TemplateResponse('users.html', {'request': request, 'page_name': page_name, 'data': users})
 
 
 # @app.get("/data/")
@@ -82,4 +86,4 @@ async def delete_user(id: int):
 
 
 if __name__ == "__main__":
-    uvicorn.run("HW_5_Task_3_6.py:app", host="127.0.0.1", port=8000)
+    uvicorn.run("HW_5_Task_3_6:app", host="127.0.0.1", port=8000)
