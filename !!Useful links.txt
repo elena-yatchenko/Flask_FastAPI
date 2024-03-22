@@ -17,6 +17,8 @@ https://alexeyseleznev.wordpress.com/2020/04/30/python-%D0%BA%D0%B0%D0%BA-%D1%81
 
 Форматирование таблицы pandas в html
 
+
+
 !!!!! Типы ввода данных в HTML
 
 <input type="button | checkbox | file | hidden | image | password | radio | reset | submit | text |

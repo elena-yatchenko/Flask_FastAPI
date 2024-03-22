@@ -20,7 +20,7 @@ import sqlalchemy
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, EmailStr, SecretStr
 import uvicorn
-from random import choices
+from contextlib import asynccontextmanager
 
 DATABASE_URL = "sqlite:///less_6_users.db"
 database = databases.Database(DATABASE_URL)
@@ -28,18 +28,27 @@ metadata = sqlalchemy.MetaData()
 ...
 # engine = sqlalchemy.create_engine(DATABASE_URL)
 
+# @app.on_event("startup")
+# async def startup():
+#     await database.connect()
 
-app = FastAPI()
+
+# @app.on_event("shutdown")
+# async def shutdown():
+#     await database.disconnect()
 
 
-@app.on_event("startup")
-async def startup():
+# Т.к. методы on_event не будут поддерживаться в более новых версиях, лучше использовать lifespan
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await database.connect()
-
-
-@app.on_event("shutdown")
-async def shutdown():
+    print("База готова")
+    yield
     await database.disconnect()
+    print("База очищена")
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 users = sqlalchemy.Table(
