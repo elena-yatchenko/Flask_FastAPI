@@ -23,11 +23,13 @@
 # ○ Изменение
 # ○ Удаление
 
-"""query = users.select().where(users.c.user_id == user_id)
+"""
+1) query = users.select().where(users.c.user_id == user_id)
 как из этого запроса вытащить данные user.email, к примеру. Чтобы какую-то проверку сделать, на уникальность, к примеру? 
-на вход функция получает только user_id
+на вход функция получает только user_id. Я бы хотела вытащить все атрибуты отфильтрованного пользователя. Как с этми query дальше работать?
+Пробовала как result = await database.execute(query) и потом вывести по ключам, не получается. 
 
-Или как иначе обеспечить уникальность email? атрибут unique=True не работаетб создается пользователь все равно
+2) Как иначе обеспечить уникальность email? атрибут unique=True не работает, создается пользователь все равно с таким же email
 class UserAdd(BaseModel):
     username: str = Field(..., title="Username", max_length=32)
     surname: str = Field(title="Surname", max_length=64)
@@ -257,6 +259,7 @@ async def get_orders():
 @app.get("/orders/{order_id}", response_model=OrderGet)
 async def get_order(order_id: int):
     query = orders.select().where(orders.c.order_id == order_id)
+
     return await database.fetch_one(query)
 
 
