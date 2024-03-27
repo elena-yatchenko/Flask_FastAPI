@@ -1,29 +1,4 @@
-# Необходимо создать базу данных для интернет-магазина. База данных должна
-# состоять из трех таблиц: товары, заказы и пользователи. Таблица товары должна
-# содержать информацию о доступных товарах, их описаниях и ценах. Таблица
-# пользователи должна содержать информацию о зарегистрированных
-# пользователях магазина. Таблица заказы должна содержать информацию о
-# заказах, сделанных пользователями.
-# ○ Таблица пользователей должна содержать следующие поля: id (PRIMARY KEY),
-# имя, фамилия, адрес электронной почты и пароль.
-# ○ Таблица товаров должна содержать следующие поля: id (PRIMARY KEY),
-# название, описание и цена.
-# ○ Таблица заказов должна содержать следующие поля: id (PRIMARY KEY), id
-# пользователя (FOREIGN KEY), id товара (FOREIGN KEY), дата заказа и статус
-# заказа.
 
-# Создайте модели pydantic для получения новых данных и
-# возврата существующих в БД для каждой из трёх таблиц
-# (итого шесть моделей).
-# Реализуйте CRUD операции для каждой из таблиц через
-# создание маршрутов, REST API (итого 15 маршрутов).
-# ○ Чтение всех
-# ○ Чтение одного
-# ○ Запись
-# ○ Изменение
-# ○ Удаление
-
-"""!!! ОТветы и проверка ответов см. в соседнем файле HW_6_questions"""
 """
 Вопросы:
 1) query = users.select().where(users.c.user_id == user_id)
@@ -31,16 +6,7 @@
 на вход функция получает только user_id. Я бы хотела вытащить все атрибуты отфильтрованного пользователя. 
 Как с этми query дальше работать?
 Пробовала как result = await database.execute(query) и потом вывести по ключам, не получается. 
-
-2) Как иначе обеспечить уникальность email? атрибут unique=True не работает, создается пользователь все равно с таким же email
-class UserAdd(BaseModel):
-    username: str = Field(..., title="Username", max_length=32)
-    surname: str = Field(title="Surname", max_length=64)
-    email: EmailStr = Field(title="Email", unique=True)
-    password: SecretStr = Field(title="Password")
-
-    По вопросам
-
+Ответ: 
 1) Для извлечения данных пользователя по user_id, включая его email, после выполнения запроса к базе данных 
 с использованием database.fetch_one(query), вы должны работать с результатом, 
 который эта функция возвращает. database.execute(query) используется для выполнения запросов, 
@@ -48,12 +14,43 @@ class UserAdd(BaseModel):
 в то время как database.fetch_one(query) предназначен для запросов, которые возвращают одну запись, 
 и database.fetch_all(query) — для запросов, возвращающих несколько записей.
 
-2) В вашем случае, атрибут unique=True в pydantic модели UserAdd не обеспечивает уникальность на уровне базы данных. Это лишь указание для pydantic, которое может использоваться в документации или валидации, но не влияет на структуру базы данных.
+Проверка: 
+@app.get("/users/{user_id}", response_model=UserGet)
+async def get_user(user_id: int):
+    query = users.select().where(users.c.user_id == user_id)
+    data = await database.fetch_one(query)
+    # data - выбранный экземпляр класса User, его атрибуты можно получать и с ними можно работать.
+    # но возвращать функция должна экзепляр или список экземпляров класса, не его отдельный атрибут, иначе будет
+    # ошибка {'type': 'model_attributes_type', 'loc': ('response',), 
+    # 'msg': 'Input should be a valid dictionary or object to extract fields from', 
+    # 'input': 'mail1@mail.ru', 'url': 'https://errors.pydantic.dev/2.6/v/model_attributes_type'}
+    print(data.email)
+    return data
 
-Чтобы обеспечить уникальность email на уровне базы данных, вам необходимо определить столбец email как уникальный при создании таблицы.
+2) Как иначе обеспечить уникальность email? атрибут unique=True не работает, создается пользователь все равно с таким же email
+class UserAdd(BaseModel):
+    username: str = Field(..., title="Username", max_length=32)
+    surname: str = Field(title="Surname", max_length=64)
+    email: EmailStr = Field(title="Email", unique=True) - здесь уникальность не нужна, она прописывается для базы данных
+    password: SecretStr = Field(title="Password")
 
-Желаю успехова в дальнейшем обучении.
-Увидимся на следующих блоках ;-)
+Ответ:
+2) В вашем случае, атрибут unique=True в pydantic модели UserAdd не обеспечивает уникальность 
+на уровне базы данных. Это лишь указание для pydantic, которое может использоваться в документации 
+или валидации, но не влияет на структуру базы данных.
+
+Чтобы обеспечить уникальность email на уровне базы данных, вам необходимо определить столбец 
+email как уникальный при создании таблицы.
+
+users = sqla.Table(
+    "users",
+    metadata,
+    sqla.Column("user_id", sqla.Integer, primary_key=True),
+    sqla.Column("username", sqla.String(32)),
+    sqla.Column("surname", sqla.String(64)),
+    sqla.Column("email", sqla.String(64), unique=True),
+    sqla.Column("password", sqla.String),
+)
 """
 
 from typing import List, Optional
@@ -67,23 +64,11 @@ from enum import Enum
 from datetime import date, datetime
 from random import randrange, choice
 
-DATABASE_URL = "sqlite:///market.db"
+DATABASE_URL = "sqlite:///questions.db"
 database = databases.Database(DATABASE_URL)
 metadata = sqla.MetaData()
 ...
-# engine = sqlalchemy.create_engine(DATABASE_URL)
 
-# @app.on_event("startup")
-# async def startup():
-#     await database.connect()
-
-
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await database.disconnect()
-
-
-# Т.к. методы on_event не будут поддерживаться в более новых версиях, лучше использовать lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await database.connect()
@@ -97,7 +82,6 @@ class Status(str, Enum):
     in_process = "in_process"
     done = "done"
     canceled = "canceled"
-
 
 app = FastAPI(lifespan=lifespan)
 
@@ -117,7 +101,7 @@ users = sqla.Table(
     sqla.Column("user_id", sqla.Integer, primary_key=True),
     sqla.Column("username", sqla.String(32)),
     sqla.Column("surname", sqla.String(64)),
-    sqla.Column("email", sqla.String(64)),
+    sqla.Column("email", sqla.String(64), unique=True),
     sqla.Column("password", sqla.String),
 )
 
@@ -137,7 +121,7 @@ metadata.create_all(engine)
 class UserAdd(BaseModel):
     username: str = Field(..., title="Username", max_length=32)
     surname: str = Field(title="Surname", max_length=64)
-    email: EmailStr = Field(title="Email", unique=True)
+    email: EmailStr = Field(title="Email")
     password: SecretStr = Field(title="Password")
 
 
@@ -174,7 +158,10 @@ async def root():
 
 
 # ОПЕРАЦИИ С ПОЛЬЗОВАТЕЛЯМИ
-
+"""
+database.fetch_one(query)
+database.fetch_all(query)
+"""
 
 @app.get("/users/", response_model=List[UserGet])
 async def get_users():
@@ -298,19 +285,6 @@ async def create_order(order: OrderAdd):
 for key in database.fetch_one(query)
 for user in database.fetch_all(query)
 """
-# order_user_id: int, order_item_id: int
-# where(users.user_id == order_user_id),
-# user_id: int = Field(title="Buyer_ID", max_length=32)
-#     item_id: int = Field(title="Pruduct_ID")
-#     order_date: date = Field(default=datetime.now().date(), title="Order Date", gt=0)
-#     status: Status = Field(title="Status of Order")
-
-#      sqla.Column("order_id", sqla.Integer, primary_key=True),
-#     sqla.Column("user_id", sqla.Integer, sqla.ForeignKey("users.user_id")),
-#     sqla.Column("item_id", sqla.Integer, sqla.ForeignKey("items.item_id")),
-#     sqla.Column("order_date", sqla.Date),
-#     sqla.Column("status", sqla.Enum),
-
 
 @app.put("/orders/{order_id}", response_model=OrderGet)
 async def update_order(order_id: int, new_order: OrderAdd):
@@ -332,32 +306,32 @@ async def delete_order(order_id: int):
 
 @app.get("/fake_data/")
 async def create_note():
-    # for i in range(5):
-    #     query = users.insert().values(
-    #         username=f"user{i}",
-    #         surname=f"surname{i}",
-    #         email=f"mail{i}@mail.ru",
-    #         password=f"123456_{i}",
-    #     )
-    #     await database.execute(query)
+    for i in range(5):
+        query = users.insert().values(
+            username=f"user{i}",
+            surname=f"surname{i}",
+            email=f"mail{i}@mail.ru",
+            password=f"123456_{i}",
+        )
+        await database.execute(query)
 
-    # for i in range(10):
-    #     query = items.insert().values(
-    #         name=f"name_00{i}",
-    #         description=f"{'d'*i}",
-    #         price=randrange(100, 2000, 100),
-    #         is_available=choice([True, False]),
-    #     )
-    #     await database.execute(query)
+    for i in range(10):
+        query = items.insert().values(
+            name=f"name_00{i}",
+            description=f"{'d'*i}",
+            price=randrange(100, 2000, 100),
+            is_available=choice([True, False]),
+        )
+        await database.execute(query)
 
-    # for i in range(7):
-    #     query = orders.insert().values(
-    #         user_id=choice(range(1, 6)),
-    #         item_id=choice(range(1, 11)),
-    #         order_date=datetime.now().date(),
-    #         status=choice([Status.in_process, Status.done, Status.canceled]),
-    #     )
-    #     await database.execute(query)
+    for i in range(7):
+        query = orders.insert().values(
+            user_id=choice(range(1, 6)),
+            item_id=choice(range(1, 11)),
+            order_date=datetime.now().date(),
+            status=choice([Status.in_process, Status.done, Status.canceled]),
+        )
+        await database.execute(query)
 
     return {"Data base is created"}
 
@@ -375,4 +349,4 @@ async def create_note():
 # user: User
 
 if __name__ == "__main__":
-    uvicorn.run("HW_6_Task_1(6):app", host="127.0.0.1", port=8000)
+    uvicorn.run("HW_6_questions:app", host="127.0.0.1", port=8000)
